@@ -53,9 +53,9 @@ def apply_patch(patch, dir='webrtc-build', depth=1):
 if __name__ == '__main__':
     for patch in [
         'clone_depot_tools_use_d1',
+        'build_with_component',
         'container_preparations_advance',
-        'translation_into_english',
         'fix_window_scriptinvocationpath_error',
-        'build_with_component'
+        # 'translation_into_english',
     ]:
         apply_patch(f'../{patch}.patch')
