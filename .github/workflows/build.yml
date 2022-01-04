@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: webrtc.windows.zip
-        path: _package\windows\webrtc.zip
+        path: webrtc-build\_package\windows\webrtc.zip
   build-macos:
     strategy:
       fail-fast: false
@@ -58,7 +58,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: webrtc.${{ matrix.name }}.tar.gz
-        path: _package/${{ matrix.name }}/webrtc.tar.gz
+        path: webrtc-build/_package/${{ matrix.name }}/webrtc.tar.gz
   build-linux:
     strategy:
       fail-fast: false
@@ -91,7 +91,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: webrtc.${{ matrix.name }}.tar.gz
-        path: _package/${{ matrix.name }}/webrtc.tar.gz
+        path: webrtc-build/_package/${{ matrix.name }}/webrtc.tar.gz
   create-release:
     name: Create Release
     if: contains(github.ref, 'tags/m')
