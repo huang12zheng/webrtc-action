@@ -1,0 +1,716 @@
+diff --git a/README.md b/README.md
+index b39e1ab..96e9105 100644
+--- a/README.md
++++ b/README.md
+@@ -10,25 +10,25 @@ We will not respond to PRs or issues that have not been discussed on Discord. Al
+ 
+ Please read https://github.com/shiguredo/oss/blob/master/README.en.md before use.
+ 
+-## 時雨堂のオープンソースソフトウェアについて
++## About Shiguredo's open source software
+ 
+-利用前に https://github.com/shiguredo/oss をお読みください。
++Please read [oss](oss) before using.
+ 
+-## webrtc-build について
++## About webrtc-build
+ 
+-様々な環境向けの WebRTC のビルドを行って、そのバイナリを提供しています。
++She builds her WebRTC for various environments and provides its binaries.
+ 
+-## ダウンロード
++## Download
+ 
+-[リリース](https://github.com/melpon/webrtc-build/releases) からダウンロードしてください。
++Download it from Releases (https://github.com/melpon/webrtc-build/releases).
+ 
+-## パッケージに入っている内容
++## The contents of the package
+ 
+-- WebRTC ライブラリ(webrtc.lib あるいは libwebrtc.a)
+-- WebRTC のインクルードヘッダ
+-- WebRTC のバージョン情報(コミットハッシュ)
++- WebRTC library (webrtc.lib or libwebrtc.a)
++- WebRTC internal header
++- Version information of WebRTC (participating in hashing)
+ 
+-## 現在提供しているビルド
++## Currently available builds
+ 
+ - windows x86_64
+ - macos_arm64
+@@ -45,63 +45,64 @@ Please read https://github.com/shiguredo/oss/blob/master/README.en.md before use
+ - android
+ - ios
+ 
+-## 今後提供を検討しているビルド
++## is discussing future build offerings
+ 
+-**有償での優先実装を検討可能です**
++** may consider priority implementation of ** for compensation
+ 
+ - windows_arm64
+ - ubuntu-20.04_armv8
+ 
+-## ライセンス
++## authorization
+ 
+ Apache License 2.0
+ 
+ ```
+-Copyright 2019-2021, Wandbox LLC (Original Author)
++Copyright 2019-2021, Wandbox LLC
+ Copyright 2019-2021, Shiguredo Inc.
+ 
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
++Licensed under the Apache License, version 2.0 (the "License");
++You may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+-    http://www.apache.org/licenses/LICENSE-2.0
++http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++Distributed under the License is distributed on an "AS is" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express OR implied.
+ See the License for the specific language governing permissions and
+-limitations under the License.
++Limitations under the License.
+ ```
+ 
+-### コントリビューター
++### contributors
+ 
+ - melpon - *Original Author*
+-    - Android サポート
+-    - iOS サポート
+-    - CentOS 8 サポート
++  - the Android support
++  - the iOS support
++  - CentOS 8 Supported
+ - tnoho - *Original Author*
+-    - macOS 向け AV1 サポート
+-    - macOS 向け H.265 サポート
++  - AV1 support for macOS
++  - H.265 support for -MacOS
+ - hakobera
+-    - Ubuntu 20.04 x86_64 サポート
+-    - macOS 11 arm64 サポート
++  - Ubuntu 20.04 X8_64 is supported
++  - macOS 11ARM64 support
+ - enm10k
+-    - iOS 向けデバッグビルド追加
++  - Added debug builds for iOS
+ - soudegesu
+-    - macOS 向け ObjC ヘッダー追加
++  - Add ObjC headers for macOS
++
+ 
+-## タグやブランチ運用について
++## About tags and branching
+ 
+-- feature/m94.4606 のようにブランチを切ります
+-    - branch-heads のブランチは削除してはいけません
+-    - stable リリースまでは feature 上でタグを打ちます
+-- stable リリースされたら master にマージします
+-    - ブランチから変更が無ければタグを打つ必要はありません
+-- libwebrtc のコミットポジションは変更せずに何か変更がある場合は一番右の数値を増やします
+-    - m94.4606.0.0 から m94.4606.0.1 のようにする
++- Cut branches like -feature/m94.4606
++  - Branches of branch-heads cannot be deleted.
++  - Label the feature until stable version.
++- stable will be merged with the master
++  - If the branch does not change, there is no need to label it.
++- libwebrtc commit position unchanged, if anything changes, increase the rightmost value.
++  - Change from -m94.4606.0.0 to m94.4606.0.1
+ 
+-## パッチ運用について
++## About patch application
+ 
+-- 最新版でパッチが動作しない場合はパッチ作成者が修正をしてください
+-- 何かしらの理由でパッチ修正が難しい場合はパッチを削除します
+-    - 時雨堂で必要と思ったパッチは時雨堂にて対応します
++- If the patch does not work in the latest version, please patch the patch maker
++- If the patch is difficult to fix for some reason, we remove the patch.
++    - The patch required by the rain hall corresponds to the rain hall.
+\ No newline at end of file
+diff --git a/docs/patch_ios.md b/docs/patch_ios.md
+index 5d61f09..df9db87 100644
+--- a/docs/patch_ios.md
++++ b/docs/patch_ios.md
+@@ -1,31 +1,31 @@
+-# iOS 向けのパッチについて
++# About patches for iOS
+ 
+-## 内容
++## Contents
+ 
+-- 接続時のマイクのパーミッション要求を抑制する。
++- Suppress microphone permission requests when connecting.
+ 
+-- マイクの初期化を明示的に行う API を追加する。
+-  パッチ適用後はマイクは自動的に初期化されない。
++- Add an API that explicitly initializes the microphone.
++  The microphone is not automatically initialized after applying the patch.
+ 
+-- ``AVAudioSession`` の初期化時に設定されるカテゴリを ``AVAudioSessionCategoryPlayAndRecord`` から ``AVAudioSessionCategoryAmbient`` に変更する。
++- Change the category set when initializing `` AVAudioSession`` from `` AVAudioSessionCategoryPlayAndRecord`` to `` AVAudioSessionCategoryAmbient``.
+ 
+ 
+-## パッチ適用後の使い方
++## How to use after applying the patch
+ 
+-- マイクを使う場合は ``RTCAudioSession.initializeInput(completionHandler:)`` を実行してマイクを初期化する。
+-  - このメソッドはマイクが使用されるまで非同期で待ち、必要になったら初期化する。マイクの使用許可がなければユーザーにパーミッションを要求する。
+-  - 接続ごとに実行すること。接続が終了するとマイクは初期化前の状態に戻る。
+-  - 実行前に ``RTCAudioSessionConfiguration.webRTCConfiguration.category`` にマイクを使用可能なカテゴリをセットすること。 ``AVAudioSessionCategoryPlayAndRecord`` など。
++- If you want to use a microphone, execute `` RTCAudioSession.initializeInput (completionHandler :) `` to initialize the microphone.
++  - This method waits asynchronously until the microphone is used and initializes it when needed. If you do not have permission to use the microphone, ask the user for permission.
++  - Do it for each connection. When the connection is completed, the microphone returns to the state before initialization.
++  - Set the microphone-enabled category in `` RTCAudioSessionConfiguration.webRTCConfiguration.category`` before execution. For example, `` AVAudioSessionCategoryPlayAndRecord``.
+ 
+-- マイクを使わない場合は ``Info.plist`` にマイクの用途を記述する必要はない。
++- If you don't use a microphone, you don't need to describe the purpose of the microphone in `` Info.plist``.
+ 
+ 
+-## `RTCAudioSession` のロックについて
++## About locking `RTCAudioSession`
+ 
+-パッチに変更を加える際は `RTCAudioSession` をロックするタイミングに注意すること。
+-実行中に `RTCAudioSession` の設定を `configureWebRTCSession` などのメソッドで変更する場合はロックを行う必要がある。
+-ロックは `lockForConfiguration` で行い、 `unlockForConfiguration` で解除する。
+-たとえば `configureWebRTCSession` を適切にロックして実行するには、次のように前後を `lockForConfiguration` と `unlockForConfiguration` で囲む:
++Be careful when you lock `RTCAudioSession` when making changes to the patch.
++If you want to change the setting of `RTCAudioSession` with a method such as` configureWebRTCSession` during execution, you need to lock it.
++The lock is done with `lockForConfiguration` and released with` unlockForConfiguration`.
++For example, to properly lock and execute `configureWebRTCSession`, enclose it in` lockForConfiguration` and `unlockForConfiguration` as follows:
+ 
+ ```
+ [session lockForConfiguration];
+@@ -33,26 +33,28 @@ bool success = [session configureWebRTCSession:nil];
+ [session unlockForConfiguration];
+ ```
+ 
+-`lockForConfiguration` はパッチ実装時は再帰的ロックで実装されていたが、現在は相互排他ロック (mutex) で実装されている。
+-複数の箇所 (他のスレッド含む) でロックした場合、最初のロックが `unlockForConfiguration` で解除されるまで他の箇所の実行が止まるので注意すべき。
++`lockForConfiguration` was implemented as a recursive lock when the patch was implemented, but is now implemented as a mutual exclusive lock (mutex).
++Note that if you lock at multiple locations (including other threads), the other locations will stop executing until the first lock is released with `unlockForConfiguration`.
+ 
+-パッチで追加する `-[RTCAudioSession startVoiceProcessingAudioUnit:]` は `RTCAudioSession` の設定を変更するためにロックを行う。
+-`startVoiceProcessingAudioUnit:` は `VoiceProcessingAudioUnit::Initialize()` (`sdk/objc/native/src/audio/voice_processing_audio_unit.mm`) から呼ばれる。
+-`VoiceProcessingAudioUnit::Initialize()` は次の複数の箇所から呼ばれている:
++The `-[RTCAudioSession startVoiceProcessingAudioUnit:]` added in the patch locks to change the setting of` RTCAudioSession`.
++`startVoiceProcessingAudioUnit:` is called from` VoiceProcessingAudioUnit::Initialize() `(` sdk / objc / native / src / audio / voice_processing_audio_unit.mm`).
++`VoiceProcessingAudioUnit::Initialize()` is called from multiple places:
+ 
+ - `AudioDeviceIOS::InitPlayOrRecord()` (`sdk/objc/native/src/audio/audio_device_ios.mm`)
+ - `AudioDeviceIOS::HandleSampleRateChange()` (`sdk/objc/native/src/audio/audio_device_ios.mm`)
+ - `AudioDeviceIOS::UpdateAudioUnit()` (`sdk/objc/native/src/audio/audio_device_ios.mm`)
+ 
+-`AudioDeviceIOS::InitPlayOrRecord()` はロックした状態で `VoiceProcessingAudioUnit::Initialize()` を呼んでいるが、 `AudioDeviceIOS::HandleSampleRateChange()` は呼び出し元をたどってもロックされていない (と思われる) 。
++`AudioDeviceIOS::InitPlayOrRecord()`  In the locked state
++`VoiceProcessingAudioUnit::Initialize()` in the Calling
++`AudioDeviceIOS::HandleSampleRateChange()` Lookup of the called party is not locked (estimate)
+ 
+-また、 `AudioDeviceIOS::UpdateAudioUnit()` でもロックされていない。
+-メソッド内で `ConfigureAudioSession()` を呼んでいるが、 `ConfigureAudioSession()` 内でロックしている (`-[RTCAudioSession configureWebRTCSession:]` を呼んでいる) ので、もしこの時点でロックされていればデッドロックするはず。
+-したがって、この直後で呼ばれる `VoiceProcessingAudioUnit::Initialize()` はロックせずに呼ばれていることになる。
++Also, it is not locked by `AudioDeviceIOS::UpdateAudioUnit()`.
++I'm calling `ConfigureAudioSession()` in the method, but I'm locking it in `ConfigureAudioSession()` (I'm calling`-[RTCAudioSession configureWebRTCSession:] `), so if it's locked at this point Should be deadlocked.
++Therefore, the `VoiceProcessingAudioUnit::Initialize()` that is called immediately after this is called without locking.
+ 
+-もしその実装が正しいのであれば、 `VoiceProcessingAudioUnit::Initialize()` の呼び出しはロック不要であり、 `AudioDeviceIOS::InitPlayOrRecord()` で行うロックは意味がない。
+-そこで、パッチでは `AudioDeviceIOS::InitPlayOrRecord()` 内で `VoiceProcessingAudioUnit::Initialize()` を呼ぶ前にロックを解除している。
+-次に該当のパッチを示す:
++If the implementation is correct, calling `VoiceProcessingAudioUnit::Initialize()` does not need to be locked, and locking with `AudioDeviceIOS::InitPlayOrRecord()` is meaningless.
++So the patch unlocks it before calling `VoiceProcessingAudioUnit::Initialize()` in `AudioDeviceIOS::InitPlayOrRecord()`.
++Here's the patch:
+ 
+ ```
+ --- a/sdk/objc/native/src/audio/audio_device_ios.mm
+@@ -61,13 +63,15 @@ bool success = [session configureWebRTCSession:nil];
+        audio_unit_.reset();
+        return false;
+      }
+-+    // NOTE(enm10k): lockForConfiguration の実装が recursive lock から non-recursive lock に変更されたタイミングで、
+-+    // この関数内の lock と、 audio_unit_->Initialize 内で実行される startVoiceProcessingAudioUnit が取得しようとするロックが競合するようになった
+-+    // パッチ前の処理はロックの粒度を大きめに取っているが、以降の SetupAudioBuffersForActiveAudioSession や audio_unit_->Initialize は lock を必要としていないため、
+-+    // ここで unlockForConfiguration するように修正する
+++    // NOTE (enm10k): When the lockForConfiguration implementation changes from recursive lock to non-recursive lock,
+++    // The lock in this function now conflicts with the lock that startVoiceProcessingAudioUnit tries to acquire in audio_unit_-> Initialize.
+++    // The pre-patch process takes a large lock particle size, but subsequent SetupAudioBuffersForActiveAudioSession and audio_unit_-> Initialize do not require a lock, so
+++    // Modify it to unlockForConfiguration here
+ +    [session unlockForConfiguration];
+      SetupAudioBuffersForActiveAudioSession();
+      audio_unit_->Initialize(playout_parameters_.sample_rate());
+ +    return true;
+    }
++ 
++   // Release the lock.
+ ```
+diff --git a/oss b/oss
+new file mode 100644
+index 0000000..e22212a
+--- /dev/null
++++ b/oss
+@@ -0,0 +1,103 @@
++About Shiguredo's open source software
++About the development
++Shiguredo's open source software has open code, but not open source software. Therefore, dissonant issues and abductions will be closed without comment.
++
++If there is something, please contact us first with a discord.
++
++I refer to Lua's development style
++Lua is open software, but it has never been open sourced.
++
++About license
++All open source software published by Shiguredo is published under the Apache License 2.0.
++
++Apache License, Edition 2.0
++
++About version number
++YYYY.RELEASE.FIX
++YYYY is the year
++RELEASE was released that year
++FIX starts at 0 and increments when a bug fix is ​​addressed
++Version example
++2021.1.0
++2021.3.1
++About the canary version
++YYYY.RELEASE.FIX-canary.CANARY-RELEASE
++May be released regularly as a squirrel before the squirrel
++
++CANARY-RELEASE starts at 0 and grows to 1,2,3 ... until leased.
++
++Version example
++
++2021.1.0-canary.0
++2021.3.1-canary.3
++Language
++Shiguredo members or directors are not available in any language other than Japanese.
++
++Question
++Please read the document o or try it in practice before asking a question.
++
++Questions will be sent to each channel of discord.
++
++Shiguredo members will answer questions from those who hold the donation label.
++
++Please use Stack Overflow etc. for programming language and how to use the framework.
++
++If you have a problem and are in trouble
++Please tell me what you need to know to solve the problem.
++
++If you are in trouble because you don't know how to use it
++Please tell me what you want to do and what you are having trouble with.
++
++Build-related questions
++Does not correspond to build-related questions
++
++Please use the pre-built binary
++If you want to build your own, please refer to his GitHub Actions setup.
++Bug report
++Bug reports are first sent to each Discord channel.
++
++GitHub problem
++Please use it only when you are asked to report oo to the problem by a member of Shiguredo or a manager because of a disagreement.
++
++GitHub abduction request
++Requests for improvement and refurbishment abduction are first addressed to each channel of dissonance.
++
++Once merged improvements and fixes need continuous maintenance. Therefore, we ask for "discussion" and "convincing". If you find it awkward, please use it again. Shiguredo's OSS is closed for launch.
++
++About implementation of superior function
++The open source software released by Shiguredo will be implemented oo.
++
++WebRTC SFU Sora JavaScript SDK
++WebRTC SFU Sora demo app
++WebRTC SFU Sora iOS SDK
++WebRTC SFU Sora Android SDK
++WebRTC SFU Sora Unity SDK
++WebRTC load testing tool Zakuro
++Recording sound synthesis tool Hisui
++WebRTC Accounting Collector Kohaku
++WebRTC Primitive Client Momo
++webrtc-build
++He can only request the implementation of preferential features for customers who have a license for WebRTC SFU Sora.
++
++About support in Yuu
++The open source software published by Shiguredo does not provide support by Ari.
++
++About customization in Ari
++The open source software released by Shiguredo does not provide customized oo.
++
++Dissonance
++At Shiguredo, we have a community server oo.
++
++https://discord.gg/shiguredo
++
++It is recommended to set the icon.
++
++Inactive member kick
++Inactive members who haven't been online for 30 days on a regular basis o kick.
++
++Of course, you can feel the emotion, so don't worry.
++
++About Sora SDK
++The empty SDK will only respond if you are using the sky.
++
++For Sora Labo, please let us know your Sora Labo and GitHub account.
+\ No newline at end of file
+diff --git a/patches/README.md b/patches/README.md
+index 1502a00..1ef5842 100644
+--- a/patches/README.md
++++ b/patches/README.md
+@@ -20,18 +20,18 @@
+ 
+ ## ios_bitcode.patch
+ 
+-M95からiOSビルド時に `-gdwarf-aranges` ビルドオプションが追加された。
+-この `-gdwarf-aranges` はiOSでbitcodeを生成するためのビルドオプション `-fembed-bitcode` と両立できない。
+-M94以前を用いたSora iOS SDKではbitcode出力設定をONにした状態でのビルドを行えるため、従来の設定を踏襲するためにパッチを当てている。
++Added `-gdwarf-aranges` build option when building iOS from M95.
++This `-gdwarf-aranges` is incompatible with the build option` -fembed-bitcode` for generating bitcode on iOS.
++Since the Sora iOS SDK using M94 or earlier can be built with the bitcode output setting turned on, a patch is applied to follow the conventional setting.
+ 
+-問題の原因となる本家の変更: https://chromium-review.googlesource.com/c/chromium/src/+/3092732
+-本家に対してパッチ送信済み: https://chromium-review.googlesource.com/c/chromium/src/+/3223221
++Change of the head family that causes the problem: https://chromium-review.googlesource.com/c/chromium/src/+/3092732
++Patch sent to the head family: https://chromium-review.googlesource.com/c/chromium/src/+/3223221
+ 
+-以下のいずれかの条件下にて本パッチは削除できます
++This patch can be deleted under any of the following conditions:
+ 
+-1. パッチが本家に取り込まれる
+-2. 1.以外の方法で `-gdwarf-aranges` と `-fembed-bitcode` が両立できるように本家で対応される
+-3. SDK提供時にbitcode出力が不要と判断される
++1. The patch is taken into the head family
++2. It is supported by the head family so that `-gdwarf-aranges` and` -fembed-bitcode` can be compatible by methods other than 1.
++3. It is judged that bitcode output is unnecessary when SDK is provided
+ 
+ ## ios_manual_audio_input.patch
+ 
+@@ -62,10 +62,10 @@ M94以前を用いたSora iOS SDKではbitcode出力設定をONにした状態
+ 
+ ## ssl_verify_callback_with_native_handle.patch
+ 
+-WebRTC は Let's Encrypt のルート証明書を入れていないため、検証コールバックで検証する必要がある。
+-しかし WebRTC の検証コールバックから渡される `BoringSSLCertificate` には、検証に失敗した証明書だけが渡され、証明書チェーンが一切含まれていないため、正しく検証ができない。
+-なので BoringSSL のネイティブハンドル `SSL*` を `BoringSSLCertificate` に含めるようにする。
++WebRTC doesn't include the Let's Encrypt root certificate, so it needs to be validated with a validation callback.
++However, the `BoringSSLCertificate` passed from the WebRTC validation callback only passes the certificate that failed validation and does not contain any certificate chain, so it cannot be validated correctly.
++So include BoringSSL's native handle `SSL *` in `BoringSSLCertificate`.
+ 
+-WebRTC は Let's Encrypt を含めていないので、Let's Encrypt の検証がうまくできないという点から本家に取り込んでもらうのは難しいと思われる。
+-証明書チェーンが利用できない、という話を起点にすれば取り込んでもらえるかもしれない。
+-ただし `SSL*` を渡すのは `OpenSSLCertificate` との兼ね合いを考えると筋が悪いので、本家用のパッチを書くのであれば清書する必要がある。
++Since WebRTC does not include Let's Encrypt, it seems difficult to get it to the head family because Let's Encrypt cannot be verified well.
++If you start from the story that the certificate chain is not available, you may be able to get it.
++However, passing `SSL *` is ill-advised considering the balance with `OpenSSLCertificate`, so if you are writing a patch for the original family, you need to make a clean copy.
+diff --git a/patches/android_fixsegv.patch b/patches/android_fixsegv.patch
+index dcf1811..10659ec 100644
+--- a/patches/android_fixsegv.patch
++++ b/patches/android_fixsegv.patch
+@@ -1,4 +1,4 @@
+-# フレームドロップ時、入力に回転などが含まれてると toI420 呼び出し時に落ちてしまう
++# When dropping a frame, if the input includes rotation etc., it will be dropped when calling toI420.
+ diff --git a/sdk/android/src/java/org/webrtc/NativeCapturerObserver.java b/sdk/android/src/java/org/webrtc/NativeCapturerObserver.java
+ index c195fb3a4c..f12749e47e 100644
+ --- a/sdk/android/src/java/org/webrtc/NativeCapturerObserver.java
+@@ -12,7 +12,7 @@ index c195fb3a4c..f12749e47e 100644
+        // Drop frame.
+        return;
+      }
+-# active: false 時、callback_ に値が設定される前に OnEncodedFrame が呼ばれて落ちてしまう
++# When active: false, OnEncodedFrame is called and falls before callback_ is set to a value.
+ diff --git a/sdk/android/src/jni/video_encoder_wrapper.cc b/sdk/android/src/jni/video_encoder_wrapper.cc
+ index 3bdfdc3d35..93f9706b70 100644
+ --- a/sdk/android/src/jni/video_encoder_wrapper.cc
+diff --git a/patches/ios_manual_audio_input.patch b/patches/ios_manual_audio_input.patch
+index 8537ff0..2d5aa91 100644
+--- a/patches/ios_manual_audio_input.patch
++++ b/patches/ios_manual_audio_input.patch
+@@ -374,10 +374,10 @@ index f51714ce1d..6d19052408 100644
+        audio_unit_.reset();
+        return false;
+      }
+-+    // NOTE(enm10k): lockForConfiguration の実装が recursive lock から non-recursive lock に変更されたタイミングで、
+-+    // この関数内の lock と、 audio_unit_->Initialize 内で実行される startVoiceProcessingAudioUnit が取得しようとするロックが競合するようになった
+-+    // パッチ前の処理はロックの粒度を大きめに取っているが、以降の SetupAudioBuffersForActiveAudioSession や audio_unit_->Initialize は lock を必要としていないため、
+-+    // ここで unlockForConfiguration するように修正する
+++    // NOTE (enm10k): When the lockForConfiguration implementation changes from recursive lock to non-recursive lock,
+++    // The lock in this function now conflicts with the lock that startVoiceProcessingAudioUnit tries to acquire in audio_unit_-> Initialize.
+++    // The pre-patch process takes a large lock particle size, but subsequent SetupAudioBuffersForActiveAudioSession and audio_unit_-> Initialize do not require a lock, so
+++    // Modify it to unlockForConfiguration here
+ +    [session unlockForConfiguration];
+      SetupAudioBuffersForActiveAudioSession();
+      audio_unit_->Initialize(playout_parameters_.sample_rate());
+diff --git a/run.py b/run.py
+index 4996dbd..7cad064 100644
+--- a/run.py
++++ b/run.py
+@@ -49,9 +49,9 @@ def cmd(args, **kwargs):
+     return subprocess.run(args, **kwargs)
+ 
+ 
+-# 標準出力をキャプチャするコマンド実行。シェルの `cmd ...` や $(cmd ...) と同じ
++# Command execution to capture standard output. Same as `cmd ...` or $ (cmd ...) in the shell
+ def cmdcap(args, **kwargs):
+-    # 3.7 でしか使えない
++    # 3.7 Can only be used in
+     # kwargs['capture_output'] = True
+     kwargs['stdout'] = subprocess.PIPE
+     kwargs['stderr'] = subprocess.PIPE
+@@ -115,7 +115,7 @@ def download(url: str, output_dir: Optional[str] = None, filename: Optional[str]
+         else:
+             cmd(["wget", "-cO", output_path, url])
+     except Exception:
+-        # ゴミを残さないようにする
++        # Do not leave garbage
+         if os.path.exists(output_path):
+             os.remove(output_path)
+         raise
+@@ -130,11 +130,11 @@ def read_version_file(path: str) -> Dict[str, str]:
+     for line in lines:
+         line = line.strip()
+ 
+-        # コメント行
++        #Comment line
+         if line[:1] == '#':
+             continue
+ 
+-        # 空行
++        # Blank line
+         if len(line) == 0:
+             continue
+ 
+@@ -144,7 +144,7 @@ def read_version_file(path: str) -> Dict[str, str]:
+     return versions
+ 
+ 
+-# dir 以下にある全てのファイルパスを、dir2 からの相対パスで返す
++# All file paths under dir, Returns as a relative path from dir2
+ def enum_all_files(dir, dir2):
+     for root, _, files in os.walk(dir):
+         for file in files:
+@@ -428,7 +428,7 @@ def get_webrtc_version_info(version_info: VersionInfo):
+         revision = version_info.webrtc_commit
+         maint = version_info.webrtc_build_version.split('.')[3]
+     else:
+-        # HEAD ビルドだと正しくバージョンが取れないので、その場合は適当に空文字を入れておく
++        # If it is a HEAD build, the version cannot be obtained correctly, so in that case, insert an empty string appropriately.
+         branch = ''
+         commit = ''
+         revision = ''
+@@ -453,11 +453,11 @@ def build_webrtc_ios(
+     mkdir_p(webrtc_build_dir)
+ 
+     mkdir_p(os.path.join(webrtc_build_dir, 'framework'))
+-    # - M92-M93 あたりで clang++: error: -gdwarf-aranges is not supported with -fembed-bitcode
+-    #   がでていたので use_xcode_clang=false をすることで修正
+-    # - M94 で use_xcode_clang=true かつ --bitcode を有効にしてビルドが通り bitcode が有効になってることを確認
+-    # - M95 で再度 clang++: error: -gdwarf-aranges is not supported with -fembed-bitcode エラーがでるようになった
+-    # - https://webrtc-review.googlesource.com/c/src/+/232600 が影響している可能性があるため use_lld=false を追加
++    # - Around M92-M93 clang ++: error: -gdwarf-aranges is not supported with -fembed-bitcode
++    #   Was displayed, so fix it by doing use_xcode_clang = false
++    # - Make sure the build passes and bitcode is enabled with use_xcode_clang = true and --bitcode enabled on the M94
++    # - M95 again gives clang ++: error: -gdwarf-aranges is not supported with -fembed-bitcode error
++    # - https://webrtc-review.googlesource.com/c/src/+/232600 May be affected by Use _ lld = false o tsuika
+     gn_args_base = [
+         'use_xcode_clang=true',
+         'rtc_libvpx_build_vp9=true',
+@@ -468,7 +468,7 @@ def build_webrtc_ios(
+         *COMMON_GN_ARGS,
+     ]
+ 
+-    # WebRTC.xcframework のビルド
++    # WebRTC.xcframework Build
+     if not nobuild_framework:
+         gn_args = [
+             *gn_args_base,
+@@ -549,7 +549,7 @@ def build_webrtc_android(
+ 
+     mkdir_p(webrtc_build_dir)
+ 
+-    # Java ファイル作成
++    # Java File creation
+     branch, commit, revision, maint = get_webrtc_version_info(version_info)
+     name = 'WebrtcBuildVersion'
+     lines = []
+@@ -569,7 +569,7 @@ def build_webrtc_android(
+         *COMMON_GN_ARGS
+     ]
+ 
+-    # aar 生成
++    # aar generation
+     if not nobuild_aar:
+         work_dir = os.path.join(webrtc_build_dir, 'aar')
+         mkdir_p(work_dir)
+@@ -613,7 +613,7 @@ def build_webrtc(
+ 
+     mkdir_p(webrtc_build_dir)
+ 
+-    # ビルド
++    # Build
+     if gen_force:
+         rm_rf(webrtc_build_dir)
+     if not os.path.exists(os.path.join(webrtc_build_dir, 'args.gn')) or gen:
+@@ -679,11 +679,11 @@ def build_webrtc(
+     else:
+         ar = os.path.join(webrtc_src_dir, 'third_party/llvm-build/Release+Asserts/bin/llvm-ar')
+ 
+-    # ar で libwebrtc.a を生成する
++    # ar Generate with libwebrtc.a
+     if target != 'windows':
+         archive_objects(ar, os.path.join(webrtc_build_dir, 'obj'), os.path.join(webrtc_build_dir, 'libwebrtc.a'))
+ 
+-    # macOS の場合は WebRTC.framework に追加情報を入れる
++    # For macOS, put additional information in WebRTC.framework
+     if (target in ('macos_x86_64', 'macos_arm64')) and not nobuild_macos_framework:
+         branch, commit, revision, maint = get_webrtc_version_info(version_info)
+         info = {}
+@@ -694,7 +694,7 @@ def build_webrtc(
+         with open(os.path.join(webrtc_build_dir, 'WebRTC.framework', 'Resources', 'build_info.json'), 'w') as f:
+             f.write(json.dumps(info, indent=4))
+ 
+-        # Info.plistの編集(tools_wertc/ios/build_ios_libs.py内の処理を踏襲)
++        # Editing Info.plist (following the process in tools_wertc / ios / build_ios_libs.py)
+         info_plist_path = os.path.join(webrtc_build_dir, 'WebRTC.framework', 'Resources', 'Info.plist')
+         ver = cmdcap(['/usr/libexec/PlistBuddy', '-c', 'Print :CFBundleShortVersionString', info_plist_path],
+                      resolve=False)
+@@ -702,7 +702,7 @@ def build_webrtc(
+             f'Set :CFBundleVersion {ver}.0', info_plist_path], resolve=False, encoding='utf-8')
+         cmd(['plutil', '-convert', 'binary1', info_plist_path])
+ 
+-        # xcframeworkの作成
++        # Creating an xcframework
+         rm_rf(os.path.join(webrtc_build_dir, 'WebRTC.xcframework'))
+         cmd(['xcodebuild', '-create-xcframework',
+             '-framework', os.path.join(webrtc_build_dir, 'WebRTC.framework'),
+@@ -712,7 +712,7 @@ def build_webrtc(
+ 
+ def copy_headers(webrtc_src_dir, webrtc_package_dir, target):
+     if target == 'windows':
+-        # robocopy の戻り値は特殊なので、check=False にしてうまくエラーハンドリングする
++        # Since the return value of robocopy is special, set check = False and handle the error well.
+         # https://docs.microsoft.com/ja-jp/troubleshoot/windows-server/backup-and-storage/return-codes-used-robocopy-utility
+         r = cmd(['robocopy', webrtc_src_dir, os.path.join(webrtc_package_dir, 'include'),
+                 '*.h', '*.hpp', '/S', '/NP', '/NFL', '/NDL'], check=False)
+@@ -763,7 +763,7 @@ def package_webrtc(source_dir, build_dir, package_dir, target,
+     rm_rf(webrtc_package_dir)
+     mkdir_p(webrtc_package_dir)
+ 
+-    # ライセンス生成
++    # License generation
+     if target == 'android':
+         dirs = []
+         for arch in ANDROID_ARCHS:
+@@ -790,13 +790,13 @@ def package_webrtc(source_dir, build_dir, package_dir, target,
+         *ts, webrtc_package_dir, *dirs])
+     os.rename(os.path.join(webrtc_package_dir, 'LICENSE.md'), os.path.join(webrtc_package_dir, 'NOTICE'))
+ 
+-    # ヘッダーファイルをコピー
++    # Copy header file
+     copy_headers(webrtc_src_dir, webrtc_package_dir, target)
+ 
+-    # バージョン情報
++    # version information
+     generate_version_info(webrtc_src_dir, webrtc_package_dir)
+ 
+-    # ライブラリ
++    # Library
+     if target == 'windows':
+         files = [
+             (['obj', 'webrtc.lib'], ['lib', 'webrtc.lib']),
+@@ -812,7 +812,7 @@ def package_webrtc(source_dir, build_dir, package_dir, target,
+             (['framework', 'WebRTC.xcframework'], ['Frameworks', 'WebRTC.xcframework']),
+         ]
+     elif target == 'android':
+-        # aar を展開して classes.jar を取り出す
++        # Extract aar and extract classes.jar
+         tmp = os.path.join(webrtc_build_dir, 'tmp')
+         rm_rf(tmp)
+         mkdir_p(tmp)
+@@ -842,7 +842,7 @@ def package_webrtc(source_dir, build_dir, package_dir, target,
+         else:
+             shutil.copy2(os.path.join(webrtc_build_dir, *src), dstpath)
+ 
+-    # 圧縮
++    # compression
+     with cd(package_dir):
+         if target == 'windows':
+             with zipfile.ZipFile('webrtc.zip', 'w') as f:
+@@ -886,13 +886,13 @@ def check_target(target):
+         if os != 'Ubuntu':
+             return False
+ 
+-        # x86_64 環境以外ではビルド不可
++        # x86_64 Cannot be built except in the environment
+         arch = platform.machine()
+         logging.info(f'Arch: {arch}')
+         if arch not in ('AMD64', 'x86_64'):
+             return False
+ 
+-        # クロスコンパイルなので Ubuntu だったら任意のバージョンでビルド可能（なはず）
++        # Since it is cross-compiled, it can be built with any version if it is Ubuntu (should be)
+         if target in ('ubuntu-18.04_armv8',
+                       'raspberry-pi-os_armv6',
+                       'raspberry-pi-os_armv7',
+@@ -900,7 +900,7 @@ def check_target(target):
+                       'android'):
+             return True
+ 
+-        # x86_64 用ビルドはバージョンが合っている必要がある
++        # x86_64 Build must match version
+         osver = release['VERSION_ID']
+         logging.info(f'OS Version: {osver}')
+         if target == 'ubuntu-18.04_x86_64' and osver == '18.04':
+@@ -948,8 +948,8 @@ def main():
+     bp.add_argument("--webrtc-overlap-ios-build-dir", action='store_true')
+     bp.add_argument("--webrtc-build-dir")
+     bp.add_argument("--webrtc-source-dir")
+-    # 現在 build と package を分ける意味は無いのだけど、
+-    # 今後複数のビルドを纏めてパッケージングする時に備えて別コマンドにしておく
++    # Currently there is no point in separating build and package,
++    # Keep it as a separate command in case you want to package multiple builds together in the future.
+     pp = sp.add_parser('package')
+     pp.set_defaults(op='package')
+     pp.add_argument("target", choices=TARGETS)
+@@ -990,8 +990,9 @@ def main():
+         webrtc_package_dir = os.path.abspath(args.webrtc_package_dir) if args.webrtc_package_dir is not None else None
+ 
+     if args.target == 'windows':
+-        # Windows の WebRTC ビルドに必要な環境変数の設定
++        # Setting environment variables required for Windows WebRTC builds
+         mkdir_p(build_dir)
++        # just 400kb
+         download("https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe", build_dir)
+         path = cmdcap([os.path.join(build_dir, 'vswhere.exe'), '-latest',
+                        '-products', '*',
+@@ -1028,12 +1029,12 @@ def main():
+             if args.target == 'windows':
+                 cmd(['git', 'config', '--system', 'core.longpaths', 'true'])
+ 
+-            # ソース取得
++            # Get source
+             get_webrtc(source_dir, patch_dir, version_info.webrtc_commit, args.target,
+                        webrtc_source_dir=webrtc_source_dir,
+                        fetch=args.webrtc_fetch, force=args.webrtc_fetch_force)
+ 
+-            # ビルド
++            # Build
+             build_webrtc_args = {
+                 'source_dir': source_dir,
+                 'build_dir': build_dir,
+@@ -1046,7 +1047,7 @@ def main():
+                 'gen_force': args.webrtc_gen_force,
+                 'nobuild': args.webrtc_nobuild,
+             }
+-            # iOS と Android は特殊すぎるので別枠行き
++            # iOS and Android are too special, so go to another frame
+             if args.target == 'ios':
+                 build_webrtc_ios(**build_webrtc_args,
+                                  nobuild_framework=args.webrtc_nobuild_ios_framework,
