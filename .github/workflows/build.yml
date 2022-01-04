@@ -17,6 +17,7 @@ jobs:
   patch-source:
     steps:
     - uses: actions/checkout@v2
+    - name: init repo
       run: |
         git clone https://github.com/shiguredo-webrtc-build/webrtc-build.git
         python3 apply_patch.py
