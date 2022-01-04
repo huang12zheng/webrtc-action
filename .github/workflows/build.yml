@@ -16,7 +16,6 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
-    needs: patch-source
     steps:
     - uses: actions/checkout@v2
     - run: |
@@ -49,7 +48,6 @@ jobs:
           - macos_x86_64
           - ios
     runs-on: macOS-11.0
-    needs: patch-source
     steps:
     - uses: actions/checkout@v2
     - run: |
@@ -74,7 +72,6 @@ jobs:
           - ubuntu-20.04_x86_64
           - android
     runs-on: ubuntu-20.04
-    needs: patch-source
     steps:
     - uses: actions/checkout@v2
     - run: |
