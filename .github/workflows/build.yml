@@ -14,18 +14,14 @@ on:
       - '*'
 
 jobs:
-  patch-source:
-    steps:
-    - uses: actions/checkout@v2
-    - name: init repo
-      run: |
-        git clone https://github.com/shiguredo-webrtc-build/webrtc-build.git
-        python3 apply_patch.py
   build-windows:
     runs-on: windows-latest
     needs: patch-source
     steps:
     - uses: actions/checkout@v2
+    - run: |
+        git clone https://github.com/shiguredo-webrtc-build/webrtc-build.git
+        python3 apply_patch.py
     - name: Disk Cleanup
       run: |
         Get-PSDrive
@@ -56,6 +52,9 @@ jobs:
     needs: patch-source
     steps:
     - uses: actions/checkout@v2
+    - run: |
+        git clone https://github.com/shiguredo-webrtc-build/webrtc-build.git
+        python3 apply_patch.py
     - run: ./webrtc-build/build.${{ matrix.name }}.sh
     - name: Upload Artifact
       uses: actions/upload-artifact@v1
@@ -78,6 +77,9 @@ jobs:
     needs: patch-source
     steps:
     - uses: actions/checkout@v2
+    - run: |
+        git clone https://github.com/shiguredo-webrtc-build/webrtc-build.git
+        python3 apply_patch.py
     - name: Disk Cleanup
       run: |
         df -h
