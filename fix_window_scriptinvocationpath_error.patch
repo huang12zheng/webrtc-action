@@ -1,0 +1,12 @@
+diff --git a/build.windows.ps1 b/build.windows.ps1
+index 8b2dc14..e13f434 100644
+--- a/build.windows.ps1
++++ b/build.windows.ps1
+@@ -1,6 +1,6 @@
+ $ErrorActionPreference = 'Stop'
+ 
+-$SCRIPT_DIR = (Resolve-Path ".").Path
++$SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Definition
+ 
+ Push-Location $SCRIPT_DIR
+   # リポジトリの下に置きたいが、GitHub Actions の D:\ の容量が少なくてビルド出来ない問題があるので

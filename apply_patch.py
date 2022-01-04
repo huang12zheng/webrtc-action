@@ -51,5 +51,5 @@ def apply_patch(patch, dir='webrtc-build', depth=1):
                 cmd(['patch',f'-p{depth}'], stdin=stdin)
 
 if __name__ == '__main__':
-    for patch in ['clone_depot_tools_use_d1','container_preparations_advance','translation_into_english']:
+    for patch in ['clone_depot_tools_use_d1','container_preparations_advance','translation_into_english','fix_window_scriptinvocationpath_error']:
         apply_patch(f'../{patch}.patch')
