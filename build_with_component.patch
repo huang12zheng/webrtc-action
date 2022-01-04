@@ -1,0 +1,53 @@
+diff --git a/run.py b/run.py
+index 4996dbd..902d9e8 100644
+--- a/run.py
++++ b/run.py
+@@ -371,7 +371,7 @@ def init_rootfs(sysroot: str, config: MultistrapConfig, force=False):
+ COMMON_GN_ARGS = [
+     "rtc_include_tests=false",
+     "rtc_use_h264=false",
+-    "is_component_build=false",
++    "is_component_build=true",
+     'rtc_build_examples=false',
+     "use_rtti=true",
+     'rtc_build_tools=false',
+@@ -520,8 +520,8 @@ def build_webrtc_ios(
+             gn_gen(webrtc_src_dir, work_dir, gn_args, extra_gn_args)
+         if not nobuild:
+             cmd(['ninja', '-C', work_dir, *get_build_targets('ios')])
+-            ar = '/usr/bin/ar'
+-            archive_objects(ar, os.path.join(work_dir, 'obj'), os.path.join(work_dir, 'libwebrtc.a'))
++            # ar = '/usr/bin/ar'
++            # archive_objects(ar, os.path.join(work_dir, 'obj'), os.path.join(work_dir, 'libwebrtc.a'))
+         libs.append(os.path.join(work_dir, 'libwebrtc.a'))
+ 
+     cmd(['lipo', *libs, '-create', '-output', os.path.join(webrtc_build_dir, 'libwebrtc.a')])
+@@ -594,8 +594,8 @@ def build_webrtc_android(
+             gn_gen(webrtc_src_dir, work_dir, gn_args, extra_gn_args)
+         if not nobuild:
+             cmd(['ninja', '-C', work_dir, *get_build_targets('android')])
+-            ar = os.path.join(webrtc_src_dir, 'third_party/llvm-build/Release+Asserts/bin/llvm-ar')
+-            archive_objects(ar, os.path.join(work_dir, 'obj'), os.path.join(work_dir, 'libwebrtc.a'))
++            # ar = os.path.join(webrtc_src_dir, 'third_party/llvm-build/Release+Asserts/bin/llvm-ar')
++            # archive_objects(ar, os.path.join(work_dir, 'obj'), os.path.join(work_dir, 'libwebrtc.a'))
+ 
+ 
+ def build_webrtc(
+@@ -637,6 +637,8 @@ def build_webrtc(
+                 'rtc_enable_objc_symbol_export=false',
+                 'libcxx_abi_unstable=false',
+             ]
++            gn_args.remove('is_component_build=true')
++            gn_args += ['is_component_build=false']
+         elif target in ('raspberry-pi-os_armv6',
+                         'raspberry-pi-os_armv7',
+                         'raspberry-pi-os_armv8',
+@@ -680,7 +682,7 @@ def build_webrtc(
+         ar = os.path.join(webrtc_src_dir, 'third_party/llvm-build/Release+Asserts/bin/llvm-ar')
+ 
+     # ar で libwebrtc.a を生成する
+-    if target != 'windows':
++    if target in  ('macos_x86_64', 'macos_arm64'):
+         archive_objects(ar, os.path.join(webrtc_build_dir, 'obj'), os.path.join(webrtc_build_dir, 'libwebrtc.a'))
+ 
+     # macOS の場合は WebRTC.framework に追加情報を入れる

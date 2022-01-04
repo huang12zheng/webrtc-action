@@ -164,7 +164,7 @@ jobs:
         asset_path: webrtc.${{ matrix.name }}.tar.gz/webrtc.tar.gz
         asset_name: webrtc.${{ matrix.name }}.tar.gz
         asset_content_type: application/gzip
-  # Windows だけ Content-Type が違うので別で記述する
+  # Windows However, the content-type is different and should be described separately
   upload-assets-windows:
     name: Upload windows
     if: contains(github.ref, 'tags/m')
