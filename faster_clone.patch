@@ -1,5 +1,5 @@
 diff --git a/run.py b/run.py
-index 4996dbd..4dec229 100644
+index 4996dbd..79de1d7 100644
 --- a/run.py
 +++ b/run.py
 @@ -155,10 +155,10 @@ def get_depot_tools(source_dir, fetch=False):
@@ -24,15 +24,6 @@ index 4996dbd..4dec229 100644
              if target == 'android':
                  with open('.gclient', 'a') as f:
                      f.write("target_os = [ 'android' ]\n")
-@@ -284,7 +284,7 @@ def get_webrtc(source_dir, patch_dir, version, target,
-             cmd(['git', 'fetch'])
-             cmd(['git', 'checkout', '-f', version])
-             cmd(['git', 'clean', '-df'])
--            cmd(['gclient', 'sync', '-D', '--force', '--reset', '--with_branch_heads'])
-+            cmd(['gclient', 'sync', '-D', '--force', '--reset', '--with_branch_heads', '--no-history', '--nohooks',])
-             for patch in PATCHES[target]:
-                 depth, dirs = PATCH_INFO.get(patch, (1, ['.']))
-                 dir = os.path.join(src_dir, *dirs)
 @@ -991,18 +991,18 @@ def main():
  
      if args.target == 'windows':
