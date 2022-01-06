@@ -12,6 +12,7 @@ import collections
 import re
 from typing import Optional, Dict, List
 
+
 class ChangeDirectory(object):
     def __init__(self, cwd):
         self._cwd = cwd
@@ -25,6 +26,7 @@ class ChangeDirectory(object):
         logging.debug(f'popd {self._old_cwd} <-- {self._cwd}')
         os.chdir(self._old_cwd)
         return False
+
 
 def cmd(args, **kwargs):
     logging.debug(f'+{args} {kwargs}')
@@ -40,6 +42,7 @@ def cmd(args, **kwargs):
     return subprocess.run(args, **kwargs)
     return
 
+
 def apply_patch(patch, dir='webrtc-build', depth=1):
     with ChangeDirectory(dir):
         if platform.system() == 'Windows':
@@ -48,12 +51,13 @@ def apply_patch(patch, dir='webrtc-build', depth=1):
                  patch])
         else:
             with open(patch) as stdin:
-                cmd(['patch',f'-p{depth}'], stdin=stdin)
+                cmd(['patch', f'-p{depth}'], stdin=stdin)
+
 
 if __name__ == '__main__':
     for patch in [
-        'clone_depot_tools_use_d1',
-        'build_with_component',
+        'patch_min',
+        'faster_clone',
         'container_preparations_advance',
         'fix_window_scriptinvocationpath_error',
         # 'translation_into_english',

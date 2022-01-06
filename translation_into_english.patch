@@ -449,7 +449,7 @@ index 8537ff0..2d5aa91 100644
       SetupAudioBuffersForActiveAudioSession();
       audio_unit_->Initialize(playout_parameters_.sample_rate());
 diff --git a/run.py b/run.py
-index 4996dbd..7cad064 100644
+index 4996dbd..b36f980 100644
 --- a/run.py
 +++ b/run.py
 @@ -49,9 +49,9 @@ def cmd(args, **kwargs):
@@ -478,7 +478,7 @@ index 4996dbd..7cad064 100644
          line = line.strip()
  
 -        # コメント行
-+        #Comment line
++        # Comment line
          if line[:1] == '#':
              continue
  
@@ -668,6 +668,35 @@ index 4996dbd..7cad064 100644
          osver = release['VERSION_ID']
          logging.info(f'OS Version: {osver}')
          if target == 'ubuntu-18.04_x86_64' and osver == '18.04':
+@@ -915,17 +915,17 @@ def check_target(target):
+ 
+ def main():
+     """
+-    メモ
+-
+-    ビルド方針:
+-        - 引数無しで実行した場合、ビルドのみ行う
+-            - もし必要とするファイルが存在しなければ取得や生成を行うが、新しい更新があるかどうかは確認しない。
+-        - 各種引数を渡すと、更新や生成を行う。
+-            - fetch 系: 各種ソースを更新する
+-            - fetch-force 系: 一旦全て削除してから取得し直す
+-            - gen 系: 既存のビルドディレクトリの上に gn gen を行う
+-            - gen-force 系: 既存のビルドディレクトリは完全に削除してから gn gen をやり直す
+-            - nobuild 系: ビルドを行わない
++    notes
++
++    Building policy:
++    - Build only without independent variables
++        - Get and generate if the required file does not exist, but does not confirm whether there is a new update.
++    - Pass various parameters, update and build.
++        - FETCH class: updates various sources
++        - fetch-force system: retrieves data after deleting all data temporarily
++        - Gen System: Gn Gen on an existing build directory
++        - gen-force System: Gn gen again after the existing build directory is completely deleted
++        - nobuild System: the system does not build
+     """
+     parser = argparse.ArgumentParser()
+     sp = parser.add_subparsers()
 @@ -948,8 +948,8 @@ def main():
      bp.add_argument("--webrtc-overlap-ios-build-dir", action='store_true')
      bp.add_argument("--webrtc-build-dir")
