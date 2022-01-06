@@ -56,8 +56,8 @@ def apply_patch(patch, dir='webrtc-build', depth=1):
 
 if __name__ == '__main__':
     for patch in [
-        # 'patch_min',
-        'faster_clone',
+        'patch_min',
+        # 'faster_clone',
         'container_preparations_advance',
         'fix_window_scriptinvocationpath_error',
         # 'translation_into_english',
