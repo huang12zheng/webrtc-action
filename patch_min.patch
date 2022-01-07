@@ -18,7 +18,7 @@ index 0000000..7da49a9
 +       deps += [ "examples" ]
 +     }
 diff --git a/run.py b/run.py
-index 4996dbd..05a653a 100644
+index 4996dbd..2ab2030 100644
 --- a/run.py
 +++ b/run.py
 @@ -163,85 +163,97 @@ def get_depot_tools(source_dir, fetch=False):
@@ -28,7 +28,7 @@ index 4996dbd..05a653a 100644
 -    '4k.patch': (2, []),
 -    'macos_h264_encoder.patch': (2, []),
 -    'macos_screen_capture.patch': (2, []),
-+    'libwebrtc': (1, []),
++    'libwebrtc.patch': (1, []),
 +    # '4k.patch': (2, []),
 +    # 'macos_h264_encoder.patch': (2, []),
 +    # 'macos_screen_capture.patch': (2, []),
@@ -41,7 +41,7 @@ index 4996dbd..05a653a 100644
 -        '4k.patch',
 -        'windows_add_deps.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # '4k.patch',
 +        # 'windows_add_deps.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
@@ -54,7 +54,7 @@ index 4996dbd..05a653a 100644
 -        'macos_simulcast.patch',
 -        'ios_simulcast.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'macos_h264_encoder.patch',
@@ -71,7 +71,7 @@ index 4996dbd..05a653a 100644
 -        'macos_simulcast.patch',
 -        'ios_simulcast.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'macos_h264_encoder.patch',
@@ -89,8 +89,7 @@ index 4996dbd..05a653a 100644
 -        'ios_manual_audio_input.patch',
 -        'ios_simulcast.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
--        'ios_bitcode.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'macos_h264_encoder.patch',
@@ -99,7 +98,7 @@ index 4996dbd..05a653a 100644
 +        # 'ios_manual_audio_input.patch',
 +        # 'ios_simulcast.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
-+        # 'ios_bitcode.patch',
+         'ios_bitcode.patch',
          'ios_disable_iossim.patch',
      ],
      'android': [
@@ -109,7 +108,7 @@ index 4996dbd..05a653a 100644
 -        'android_webrtc_version.patch',
 -        'android_fixsegv.patch',
 -        'android_simulcast.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
@@ -122,7 +121,7 @@ index 4996dbd..05a653a 100644
 -        'add_dep_zlib.patch',
 -        '4k.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'nacl_armv6_2.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
@@ -132,7 +131,7 @@ index 4996dbd..05a653a 100644
 -        'add_dep_zlib.patch',
 -        '4k.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
@@ -141,7 +140,7 @@ index 4996dbd..05a653a 100644
 -        'add_dep_zlib.patch',
 -        '4k.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
@@ -150,7 +149,7 @@ index 4996dbd..05a653a 100644
 -        'add_dep_zlib.patch',
 -        '4k.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
@@ -158,14 +157,14 @@ index 4996dbd..05a653a 100644
      'ubuntu-18.04_x86_64': [
 -        '4k.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # '4k.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
      ],
      'ubuntu-20.04_x86_64': [
 -        '4k.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
-+        'libwebrtc',
++        'libwebrtc.patch',
 +        # '4k.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
      ]
