@@ -1,8 +1,18 @@
 diff --git a/run.py b/run.py
-index 4996dbd..84d2ab3 100644
+index 4996dbd..a8023d9 100644
 --- a/run.py
 +++ b/run.py
-@@ -163,85 +163,85 @@ def get_depot_tools(source_dir, fetch=False):
+@@ -155,93 +155,93 @@ def get_depot_tools(source_dir, fetch=False):
+     dir = os.path.join(source_dir, 'depot_tools')
+     if os.path.exists(dir):
+         if fetch:
+-            cmd(['git', 'fetch'])
++            cmd(['git', 'fetch', '--depth', '1'])
+             cmd(['git', 'checkout', '-f', 'origin/HEAD'])
+     else:
+-        cmd(['git', 'clone', 'https://chromium.googlesource.com/chromium/tools/depot_tools.git', dir])
++        cmd(['git', 'clone', '--depth', '1', 'https://chromium.googlesource.com/chromium/tools/depot_tools.git', dir])
+     return dir
  
  
  PATCH_INFO = {
@@ -13,8 +23,7 @@ index 4996dbd..84d2ab3 100644
 +    # 'macos_h264_encoder.patch': (2, []),
 +    # 'macos_screen_capture.patch': (2, []),
      'ios_bitcode.patch': (1, ['build']),
--    'ios_disable_iossim.patch': (1, ['build']),
-+    # 'ios_disable_iossim.patch': (1, ['build']),
+     'ios_disable_iossim.patch': (1, ['build']),
  }
  
  PATCHES = {
@@ -76,8 +85,7 @@ index 4996dbd..84d2ab3 100644
 +        # 'ios_simulcast.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
          'ios_bitcode.patch',
--        'ios_disable_iossim.patch',
-+        # 'ios_disable_iossim.patch',
+         'ios_disable_iossim.patch',
      ],
      'android': [
 -        'add_dep_zlib.patch',
@@ -141,3 +149,52 @@ index 4996dbd..84d2ab3 100644
      ]
  }
  
+@@ -269,7 +269,7 @@ def get_webrtc(source_dir, patch_dir, version, target,
+     if not os.path.exists(os.path.join(webrtc_source_dir, 'src')):
+         with cd(webrtc_source_dir):
+             cmd(['gclient'])
+-            cmd(['fetch', 'webrtc'])
++            cmd(['fetch', '--no-history', '--nohooks', 'webrtc'])
+             if target == 'android':
+                 with open('.gclient', 'a') as f:
+                     f.write("target_os = [ 'android' ]\n")
+@@ -284,7 +284,7 @@ def get_webrtc(source_dir, patch_dir, version, target,
+             cmd(['git', 'fetch'])
+             cmd(['git', 'checkout', '-f', version])
+             cmd(['git', 'clean', '-df'])
+-            cmd(['gclient', 'sync', '-D', '--force', '--reset', '--with_branch_heads'])
++            cmd(['gclient', 'sync', '-D', '--force', '--reset', '--with_branch_heads', '--no-history', '--nohooks', ])
+             for patch in PATCHES[target]:
+                 depth, dirs = PATCH_INFO.get(patch, (1, ['.']))
+                 dir = os.path.join(src_dir, *dirs)
+@@ -991,18 +991,18 @@ def main():
+ 
+     if args.target == 'windows':
+         # Windows の WebRTC ビルドに必要な環境変数の設定
+-        mkdir_p(build_dir)
+-        download("https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe", build_dir)
+-        path = cmdcap([os.path.join(build_dir, 'vswhere.exe'), '-latest',
+-                       '-products', '*',
+-                       '-requires', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64',
+-                       '-property', 'installationPath'])
+-        if len(path) == 0:
+-            raise Exception('Visual Studio not installed')
+-        path = os.path.join(path, 'Common7', 'Tools', 'VsDevCmd.bat')
+-        stdout = cmdcap(['cmd', '/c', f'{path}', '&&', 'set'])
+-        for m in re.finditer(r'(\w+)=(.*)', stdout):
+-            os.environ[m.group(1)] = m.group(2)
++        # mkdir_p(build_dir)
++        # download("https://github.com/microsoft/vswhere/releases/download/2.8.4/vswhere.exe", build_dir)
++        # path = cmdcap([os.path.join(build_dir, 'vswhere.exe'), '-latest',
++        #                '-products', '*',
++        #                '-requires', 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64',
++        #                '-property', 'installationPath'])
++        # if len(path) == 0:
++        #     raise Exception('Visual Studio not installed')
++        # path = os.path.join(path, 'Common7', 'Tools', 'VsDevCmd.bat')
++        # stdout = cmdcap(['cmd', '/c', f'{path}', '&&', 'set'])
++        # for m in re.finditer(r'(\w+)=(.*)', stdout):
++        #     os.environ[m.group(1)] = m.group(2)
+ 
+         os.environ['GYP_MSVS_VERSION'] = "2019"
+         os.environ['DEPOT_TOOLS_WIN_TOOLCHAIN'] = "0"
