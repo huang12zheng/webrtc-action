@@ -1,5 +1,5 @@
 diff --git a/run.py b/run.py
-index 4996dbd..84d2ab3 100644
+index 4996dbd..bca7b6f 100644
 --- a/run.py
 +++ b/run.py
 @@ -163,85 +163,85 @@ def get_depot_tools(source_dir, fetch=False):
@@ -13,8 +13,7 @@ index 4996dbd..84d2ab3 100644
 +    # 'macos_h264_encoder.patch': (2, []),
 +    # 'macos_screen_capture.patch': (2, []),
      'ios_bitcode.patch': (1, ['build']),
--    'ios_disable_iossim.patch': (1, ['build']),
-+    # 'ios_disable_iossim.patch': (1, ['build']),
+     'ios_disable_iossim.patch': (1, ['build']),
  }
  
  PATCHES = {
@@ -67,6 +66,7 @@ index 4996dbd..84d2ab3 100644
 -        'ios_manual_audio_input.patch',
 -        'ios_simulcast.patch',
 -        'ssl_verify_callback_with_native_handle.patch',
+-        'ios_bitcode.patch',
 +        # 'add_dep_zlib.patch',
 +        # '4k.patch',
 +        # 'macos_h264_encoder.patch',
@@ -75,9 +75,8 @@ index 4996dbd..84d2ab3 100644
 +        # 'ios_manual_audio_input.patch',
 +        # 'ios_simulcast.patch',
 +        # 'ssl_verify_callback_with_native_handle.patch',
-         'ios_bitcode.patch',
--        'ios_disable_iossim.patch',
-+        # 'ios_disable_iossim.patch',
++        # 'ios_bitcode.patch',
+         'ios_disable_iossim.patch',
      ],
      'android': [
 -        'add_dep_zlib.patch',
